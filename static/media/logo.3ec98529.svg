@@ -1,0 +1,22 @@
+<svg width="45" height="45" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <filter height="200%" width="200%" y="-50%" x="-50%" id="svg_2_blur">
+   <feGaussianBlur stdDeviation="0.5" in="SourceGraphic"/>
+  </filter>
+  <filter id="svg_1_blur">
+   <feGaussianBlur stdDeviation="0.7" in="SourceGraphic"/>
+  </filter>
+ </defs>
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="47" width="47" y="-1" x="-1"/>
+  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <text filter="url(#svg_1_blur)" font-weight="bold" xml:space="preserve" text-anchor="start" font-family="'Trebuchet MS', Gadget, sans-serif" font-size="39" id="svg_1" y="36.5" x="9.499981" stroke-width="0" stroke="#000" fill="#00ff00">N</text>
+  <text filter="url(#svg_2_blur)" font-style="italic" xml:space="preserve" text-anchor="start" font-family="'Trebuchet MS', Gadget, sans-serif" font-size="18" id="svg_2" y="17.000017" x="30.406215" stroke-width="0" stroke="#000" fill="#b2b2b2">2</text>
+ </g>
+</svg>
