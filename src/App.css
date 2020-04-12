@@ -13,15 +13,23 @@
   }
 }
 
-.App-header {
+@media (min-width: 576px) { 
+  section {
+    font-size: 8px;
+  }
+}
+
+section {
   background-color: #282c34;
   min-height: 100vh;
-  display: flex;
+  display: flex!important;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: .3em;
+  color: rgb(206, 206, 206);
 }
 
 .App-link {
@@ -39,7 +47,39 @@
 
 * { box-sizing: border-box; }
 
-body { font-family: sans-serif; }
+a.nav-link {
+  font-weight: 200;
+  font-size: 18px;
+  color: rgb(206, 206, 206)
+}
+
+a.navbar-brand {
+  font-weight: 600;
+  color: rgb(206, 206, 206)
+}
+
+a.nav-link:hover, a.navbar-brand:hover {
+  color: rgb(255, 255, 255)
+}
+
+footer.social-container {
+  bottom: 0;
+  height: 50px;
+  left: 0;
+  padding: 0 20px 20px 40px;
+  position: fixed;
+  font-size: calc(5px + 2vmin);
+  letter-spacing: .3em;
+  width: 100%;
+}
+
+
+footer.social-container a {
+  color:rgba(255,255,255,0.5)
+}
+footer.social-container a:hover {
+  color:rgb(255,255,255)
+}
 
 .scene {
   /*border: 1px solid #CCC;*/
@@ -114,4 +154,35 @@ body {
   background-image: linear-gradient(to right, #1d1e22, #333642);
   margin: 0px;
   overflow: hidden;
+}
+
+
+p.error-message {
+  letter-spacing: .1em;
+}
+
+.contact-form .form-control {
+  background-color: transparent;
+  color:#6c757d;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid;
+  -ms-overflow-style: none;
+}
+.contact-form textarea.form-control::-webkit-scrollbar {
+  display: none;
+}
+.contact-form textarea.form-control {
+  -ms-overflow-style: none;
+}
+
+.contact-form .form-control:focus {
+  background-color: transparent;
+  border-color: #495057;
+  box-shadow: 0 0 20px 0.2rem rgba(73, 80, 87, 0.25);
+}
+
+a.nostyle:link, a.nostyle:visited {
+  text-decoration: inherit;
+  color: inherit;
 }
