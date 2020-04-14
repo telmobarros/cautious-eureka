@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/cautious-eureka/precache-manifest.48e9a7025476652ad4becbcf3df89b25.js"
+  "/cautious-eureka/precache-manifest.a69dce3098aff2943d66699eab8fefb4.js"
 );
 
 self.addEventListener('message', (event) => {
