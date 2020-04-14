@@ -729,7 +729,7 @@ class Work extends React.Component {
                   } else if (value.length < 15) {
                     return <Col xs="12" className="mx-auto">
                       <iframe id="player" type="text/html"
-                        src={'http://www.youtube-nocookie.com/embed/' + value + '?fs=0&modestbranding=1&rel=0&showinfo=0'}
+                        src={'https://www.youtube-nocookie.com/embed/' + value + '?fs=0&modestbranding=1&rel=0&showinfo=0'}
                         frameborder="0"></iframe>
                     </Col>
                   }
