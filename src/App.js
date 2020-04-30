@@ -13,6 +13,7 @@ import './App.css';
 import knob from './knob.png';
 
 import ReactScrollWheelHandler from "react-scroll-wheel-handler";
+import Sound from 'react-sound';
 
 import { IoIosSend } from 'react-icons/io';
 
@@ -80,13 +81,25 @@ const AnimatedSwitch = withRouter(({ location }) => (
   </TransitionGroup>
 ));
 
-function App({ location }) {
-  return (
-    <div className="App" >
-      <Navbar />
-      <AnimatedSwitch />
-    </div>
-  );
+class App extends React.Component {
+
+  render() {
+    return (
+      <div className="App" >
+        <Sound
+      url="./bgSound.mp3"
+      autoLoad={true}
+      playStatus={Sound.status.PLAYING}
+      onLoading={this.handleSongLoading}
+      onPlaying={this.handleSongPlaying}
+      onFinishedPlaying={this.handleSongFinishedPlaying}
+    />
+        <Navbar />
+        <AnimatedSwitch />
+      </div>
+    );
+  }
+
 }
 
 class Home extends React.Component {
@@ -182,7 +195,7 @@ class Home extends React.Component {
     return (
       <section>
         {window.innerWidth < 576 && <Cube3D />}
-        {window.innerWidth >= 576 && ((random3d<0.5 && <Cube3D />) || (random3d>=0.5 && <Sphere3D/>))}
+        {window.innerWidth >= 576 && ((random3d < 0.5 && <Cube3D />) || (random3d >= 0.5 && <Sphere3D />))}
         {window.innerWidth > 576 && <ReactScrollWheelHandler
           upHandler={() => this.nextEvent()}
           downHandler={() => this.previousEvent()}
@@ -298,9 +311,9 @@ class Home extends React.Component {
               </svg>
             </div>
             <div>
-              <Link className="menu-anchor" to="/works" style={{left:'10px'}}>WORKS</Link>
-              <Link className="menu-anchor" to="/bio" style={{bottom:'11vw'}}>BIO</Link>
-              <Link className="menu-anchor" to="/contact" style={{right:'10px'}}>CONTACT</Link>
+              <Link className="menu-anchor" to="/works" style={{ left: '10px' }}>WORKS</Link>
+              <Link className="menu-anchor" to="/bio" style={{ bottom: '11vw' }}>BIO</Link>
+              <Link className="menu-anchor" to="/contact" style={{ right: '10px' }}>CONTACT</Link>
             </div>
           </div>
         </div>}

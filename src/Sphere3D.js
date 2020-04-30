@@ -90,7 +90,7 @@ export default class Sphere3D extends React.Component {
     }
   
     onMouseMove(event) {
-      console.log(event)
+      //console.log(event)
       this.setState({
         mouseX: event.clientX - this.state.windowHalfX,
         mouseY: event.clientY - this.state.windowHalfY
