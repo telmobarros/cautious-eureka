@@ -17,7 +17,10 @@ import ReactScrollWheelHandler from "react-scroll-wheel-handler";
 import { IoIosSend } from 'react-icons/io';
 
 import { Container, Row, Button, Col, Form, ThemeProvider } from 'react-bootstrap';
-import * as THREE from "three";
+
+// Components
+import Sphere3D from './Sphere3D';
+import Cube3D from './Cube3D';
 
 function Navbar() {
   const { pathname } = useLocation();
@@ -39,9 +42,10 @@ function Navbar() {
         </ul>
       </div>
       <div className="mx-auto">
-        <Link to="/" className="navbar-brand mx-auto d-none d-lg-inline-block"><span id="title" data-text="NEURA of the NORTH"><span>NEURA of the NORTH</span></span></Link>
+        <Link to="/" className="navbar-brand mx-auto d-none d-lg-inline-block"><span class="title" data-text="NEURA of the NORTH"><span>NEURA of the NORTH</span></span></Link>
         <Link to="/" className="navbar-brand mx-auto d-lg-none d-inline-block">
-          <img src={logo} alt="logo" />
+          {pathname === '/' && <span class="title" data-text="NEURA of the NORTH"><span>NEURA of the NORTH</span></span>}
+          {pathname !== '/' && <img src={logo} alt="logo" />}
         </Link>
       </div>
       <div className="navbar-collapse collapse w-100">
@@ -85,161 +89,6 @@ function App({ location }) {
   );
 }
 
-class ThreeD extends React.Component {
-  /*componentDidMount() {
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-    var renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    // document.body.appendChild( renderer.domElement );
-    // use ref as a mount point of the Three.js scene instead of the document.body
-    this.mount.appendChild( renderer.domElement );
-    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    var cube = new THREE.Mesh( geometry, material );
-    scene.add( cube );
-    camera.position.z = 5;
-    var animate = function () {
-      requestAnimationFrame( animate );
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
-      renderer.render( scene, camera );
-    };
-    animate();
-  }
-  render() {
-    return (
-      <div ref={ref => (this.mount = ref)} />
-    )
-  }*/
-  constructor(props) {
-    super(props);
-    this.state = {
-      mouseX: 0,
-      mouseY: 0,
-      SEPARATION: 200,
-      AMOUNTX: 10,
-      AMOUNTY: 10
-    };
-    if (window.innerWidth > window.innerHeight) {
-      this.state.windowHalfX = window.innerWidth / 2
-      this.state.windowHalfY = window.innerHeight / 2
-      this.state.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000)
-      this.state.scene = new THREE.Scene()
-      this.state.renderer = new THREE.WebGLRenderer({ alpha: true })
-    } else {
-
-    }
-
-    // This binding is necessary to make `this` work in the callback
-    this.animate = this.animate.bind(this);
-    this.onMouseMove = this.onMouseMove.bind(this);
-    this.render3d = this.render3d.bind(this);
-  }
-
-  componentDidMount() {
-    if (this.state.renderer) {
-      this.state.renderer.setSize(window.innerWidth, window.innerHeight - 10);
-      // document.body.appendChild( renderer.domElement );
-      // use ref as a mount point of the Three.js scene instead of the document.body
-      this.mount.appendChild(this.state.renderer.domElement);
-
-      this.state.camera.position.z = 1000
-
-
-      // particles
-      var PI2 = Math.PI * 2;
-      var material = new THREE.SpriteMaterial({
-        color: 0xffffff,
-        program: function (context) {
-          context.beginPath();
-          context.arc(0, 0, 0.5, 0, PI2, true);
-          context.fill();
-        }
-      });
-
-      var geometry = new THREE.Geometry();
-
-      for (var i = 0; i < 100; i++) {
-        var particle;
-        particle = new THREE.Sprite(material);
-        particle.position.x = Math.random() * 2 - 1;
-        particle.position.y = Math.random() * 2 - 1;
-        particle.position.z = Math.random() * 2 - 1;
-        particle.position.normalize();
-        particle.position.multiplyScalar(Math.random() * 10 + 450);
-        particle.scale.x = particle.scale.y = 10;
-        this.state.scene.add(particle);
-        geometry.vertices.push(particle.position);
-      }
-
-      // lines
-      var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.5 }));
-      this.state.scene.add(line);
-
-      // end init();
-
-      this.animate();
-    }
-  }
-
-  animate() {
-    requestAnimationFrame(this.animate);
-    this.render3d();
-  }
-
-  render3d() {
-    this.state.camera.position.set(
-      this.state.camera.position.x + (this.state.mouseX - this.state.camera.position.x) * .05,
-      this.state.camera.position.y + (- this.state.mouseY + 200 - this.state.camera.position.y) * .05,
-      this.state.camera.position.z)
-    this.state.camera.lookAt(this.state.scene.position);
-
-    this.state.renderer.render(this.state.scene, this.state.camera);
-  }
-
-  onMouseMove(event) {
-    console.log(event)
-    this.setState({
-      mouseX: event.clientX - this.state.windowHalfX,
-      mouseY: event.clientY - this.state.windowHalfY
-    })
-  }
-
-  onTouchStart(event) {
-    if (event.touches.length > 1) {
-
-      /*event.preventDefault();*/
-      this.setState({
-        mouseX: event.touches[0].pageX - this.state.windowHalfX,
-        mouseY: event.touches[0].pageY - this.state.windowHalfY
-      })
-
-    }
-  }
-
-  onTouchMove(event) {
-    if (event.touches.length === 1) {
-
-      /*event.preventDefault();*/
-      this.setState({
-        mouseX: event.touches[0].pageX - this.state.windowHalfX,
-        mouseY: event.touches[0].pageY - this.state.windowHalfY
-      })
-
-    }
-  }
-
-  render() {
-    return (
-      <div ref={ref => (this.mount = ref)}
-        onMouseMove={this.onMouseMove}
-        onTouchStart={this.onTouchStart}
-        onTouchMove={this.onTouchMove} />
-    )
-  }
-}
-
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -249,7 +98,8 @@ class Home extends React.Component {
       events: [],
       selectedIndex: 0,
       cellCount: 6,
-      knobRotation: 0
+      knobRotation: 0,
+      random3d: Math.random()
     };
   }
 
@@ -323,7 +173,7 @@ class Home extends React.Component {
 
 
   render() {
-    const { error, isLoaded, events, selectedIndex, knobRotation } = this.state;
+    const { error, isLoaded, events, selectedIndex, knobRotation, random3d } = this.state;
     /*if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -331,10 +181,12 @@ class Home extends React.Component {
     } else {*/
     return (
       <section>
-        {window.innerWidth > 576 && <ThreeD />}
-        <ReactScrollWheelHandler
+        {window.innerWidth < 576 && <Cube3D />}
+        {window.innerWidth >= 576 && ((random3d<0.5 && <Cube3D />) || (random3d>=0.5 && <Sphere3D/>))}
+        {window.innerWidth > 576 && <ReactScrollWheelHandler
           upHandler={() => this.nextEvent()}
           downHandler={() => this.previousEvent()}
+          timeout="300"
           id="events-carousel">
           <div id="events-lines">
             {events.map((value, index) => {
@@ -400,48 +252,14 @@ class Home extends React.Component {
                 y = -y
               }
               return <div className="event-info" style={{ transform: 'translate3d(0, ' + y + 'px,' + z + 'px)', opacity: opacity }}>
-                <span class="title">{value.title.rendered}</span>
+                <span class="event-title">{value.title.rendered}</span>
                 <br />
-                <span class="">{value.acf.local} . {value.acf.date}</span>
+                <span class="localdata">{value.acf.local} . {value.acf.date}</span>
               </div>
             })}
           </div>
-          {/*events.map((value, index) => {
-            let dist = Math.abs(index - selectedIndex)
-            let z = 0;
-            let y = 0;
-            let opacity = 100;
-            if (dist >= 4) {
-              z = -200;
-              y = 400;
-              opacity = 0;
-            } else if (dist >= 3) {
-              z = -120;
-              y = 300;
-            } else if (dist >= 2) {
-              z = -60;
-              y = 200;
-            } else if (dist >= 1) {
-              z = -20;
-              y = 100;
-            } else {
-            }
-            if (index < selectedIndex) {
-              y = -y
-            }
-            return <div className='event-cell' style={{ transform: 'translate3d(0, ' + y + 'px,' + z + 'px)', opacity: opacity }}>
-              <div>
-                <span className="event-line"></span>
-              </div>
-              <div className="event-info">
-                <span class="title">{value.title.rendered}</span>
-                <br/>
-                <span class="">{value.acf.local} . {value.acf.date}</span>
-              </div>
-            </div>
-          })*/}
-        </ReactScrollWheelHandler>
-        <div id="home-menu">
+        </ReactScrollWheelHandler>}
+        {window.innerWidth > 576 && <div id="home-menu">
           <img id="menu-knob" src={knob} alt="knob" style={{ transform: 'translateY(-100px) rotate(' + knobRotation + 'deg)' }} />
 
           <div id="menu-content">
@@ -464,63 +282,72 @@ class Home extends React.Component {
               <Link className="menu-anchor" to="/contact">CONTACT</Link>
             </div>
           </div>
-        </div>
-        {/*<Container fluid className="position-absolute">
-
-          <Row>
-            <Col xs={{ span: 12, order: 3 }} md={{ span: 3, order: 1 }} className="events-container">
-              <div className="scene">
-                <div className="led-container">
-                  <div className="led mid"></div>
-                </div>
-                
-                <div className="carousel" style={{ transform: 'translateZ(-120px) rotateX(' + (selectedIndex / cellCount) * -360 + 'deg)' }}>
-                  {events.map((value, index) => {
-                    let rotateX = index * (360 / cellCount)
-                    let position = selectedIndex
-                    if (selectedIndex < 0) {
-                      position = 18 + selectedIndex % events.length
-                    }
-                    let distanceFromSelected = Math.abs(Math.abs(index - ((position + (events.length / 2)) % events.length)) - events.length / 2)
-                    return <div className="carousel__cell" style={{ transform: 'rotateX(' + rotateX + 'deg) translateZ(120px)', opacity: 100 - 100 * distanceFromSelected / (cellCount / 2) + '%' }}>
-                      {value.title.rendered}<br />
-                      {value.acf.local} - {value.acf.date}
-                    </div>
-                  })}
-                </div>
+        </div>}
+        {/* SMALL DEVICES */}
+        {window.innerWidth <= 576 && <div id="home-menu">
+          <div id="menu-content">
+            <div>
+              <svg height="80" width="100">
+                <polyline points="80,10 20,50 20,70" style={{ fill: 'transparent', stroke: 'white', strokeWidth: 2 }} />
+              </svg>
+              <svg height="80" width="100">
+                <polyline points="50,10 50,30" style={{ fill: 'transparent', stroke: 'white', strokeWidth: 2 }} />
+              </svg>
+              <svg height="80" width="100">
+                <polyline points="20,10 80,50 80,70" style={{ fill: 'transparent', stroke: 'white', strokeWidth: 2 }} />
+              </svg>
+            </div>
+            <div>
+              <Link className="menu-anchor" to="/works" style={{left:'10px'}}>WORKS</Link>
+              <Link className="menu-anchor" to="/bio" style={{bottom:'11vw'}}>BIO</Link>
+              <Link className="menu-anchor" to="/contact" style={{right:'10px'}}>CONTACT</Link>
+            </div>
+          </div>
+        </div>}
+        {window.innerWidth <= 576 && <ReactScrollWheelHandler
+          rightHandler={() => this.nextEvent()}
+          leftHandler={() => this.previousEvent()}
+          timeout="300"
+          id="events-carousel">
+          {events.map((value, index) => {
+            let dist = Math.abs(index - selectedIndex)
+            let z = 0;
+            let x = 0;
+            let opacity = 100;
+            let height = 2;
+            let bgColor = 'white';
+            let width = 20;
+            if (dist >= 4) {
+              z = -200;
+              x = 800;
+              opacity = 0;
+            } else if (dist >= 3) {
+              z = -120;
+              x = 600;
+            } else if (dist >= 2) {
+              z = -60;
+              x = 400;
+            } else if (dist >= 1) {
+              z = -20;
+              x = 200;
+            } else {
+              height = 3;
+              bgColor = 'tomato';
+              width = 50;
+            }
+            if (index < selectedIndex) {
+              x = -x
+            }
+            return <div className='event-cell' style={{ transform: 'translate3d(' + x + 'px, 0, ' + z + 'px)', opacity: opacity }}>
+              <span className="event-line" style={{ transform: 'translateX(-50%)', height: height + 'px', width: width + 'px', backgroundColor: bgColor }}></span>
+              <div className="event-info" style={{ transform: 'translateX(-50%)' }}>
+                <span class="event-title">{value.title.rendered}</span>
+                <br />
+                <span class="localdata">{value.acf.local} . {value.acf.date}</span>
               </div>
-              <p style={{ textAlign: "center" }}>
-                <button className="previous-button" onClick={() => this.previousEvent()}>Previous</button>
-                <button className="next-button" onClick={() => this.nextEvent()}>Next</button>
-                </p>
-            </Col>}
-            <Col xs={{ span: 12, order: 1 }} md={{ span: 6, order: 2 }} className></Col>
-            <Col xs={{ span: 12, order: 2 }} md={{ span: 3, order: 3 }}>
-
-              {<div className="led-container">
-                <div className="led mid"></div>
-                <div className="text">Works</div>
-    </div>}
-              <Row className="menu-container">
-                <Col xs={12} md={10} className="my-3">
-                  <li>
-                    <Link to="/works" className="anchor-menu p-3">WORKS</Link>
-                  </li>
-                </Col>
-                <Col xs={12} md={10} className="my-3">
-                  <li>
-                    <Link to="/bio" className="anchor-menu py-3">BIO</Link>
-                  </li>
-                </Col>
-                <Col xs={12} md={10} className="my-3">
-                  <li>
-                    <Link to="/contact" className="anchor-menu py-3">CONTACT</Link>
-                  </li>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-                </Container>*/}
+            </div>
+          })}
+        </ReactScrollWheelHandler>}
         <footer className="social-container">
           <div className="mx-auto">
             <button className="btn btn-sm btn-dark px-4 py-0">Check my stories</button>

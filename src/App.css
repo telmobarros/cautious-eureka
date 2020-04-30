@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   height: 100%;
   position: fixed;
   width: 100%;
@@ -237,7 +238,7 @@ div.text-container h2 {
   margin: 0 0 100px;
 }
 
-div.text-container p.title {
+/*div.text-container p.title {
   color: #ffffff;
   font-size: 11px;
   font-weight: 500;
@@ -245,7 +246,7 @@ div.text-container p.title {
   text-transform: uppercase;
   margin: 0px;
   padding: 0px;
-}
+}*/
 div.text-container p.value {
   font-size: 13px;
   line-height: 20px;
@@ -458,12 +459,11 @@ div.menu-container div li a.anchor-menu:hover {
 .categories-list a {
   color: rgba(255, 255, 255, 0.5);
 }
-.categories-list a:hover,  .categories-list a.active{
+.categories-list a:hover,
+.categories-list a.active {
   color: rgb(255, 255, 255);
   font-weight: 400;
 }
-
-
 
 .cube-div {
   width: 150px;
@@ -536,78 +536,63 @@ div.menu-container div li a.anchor-menu:hover {
   transform: rotateX(-90deg) translateZ(75px);
 }
 
-
-
-
-
-
-#events-carousel{
+#events-carousel {
   position: absolute;
-  left:0;
+  left: 0;
   width: 400px;
   height: 500px;
-  padding-top:250px;
-  display:inline-block;
+  padding-top: 250px;
+  display: inline-block;
   transform-style: preserve-3d;
   transition: transform 1s;
   -moz-transition: transform 1s;
   -webkit-transition: transform 1s;
 }
 
-#events-carousel:focus{
+#events-carousel:focus {
   outline: none;
 }
 
 #events-lines {
-  width:50px;
+  width: 50px;
   perspective: 250px;
   perspective-origin: right;
-  display:inline-block;
+  display: inline-block;
 }
 
 #events-infos {
-  width:330px;
+  width: 330px;
   perspective: 250px;
   perspective-origin: left;
-  display:inline-block;
-}
-
-
-.event-cell{
-  position: absolute;
-  transition: opacity 1s ease-in-out;
-  -moz-transition: opacity 1s ease-in-out;
-  -webkit-transition: opacity 1s ease-in-out, transform 1s;
+  display: inline-block;
 }
 
 .event-info {
   position: absolute;
-  margin-left:10px;
+  margin-left: 10px;
   -webkit-transition: opacity 1s ease-in-out, transform 1s;
 }
 
-.event-info .title {
+.event-info .event-title {
   font-size: 30px;
 }
 
 .event-line {
   position: absolute;
-  top:35px;
-  right:0px;
-  -webkit-transition: opacity 1s ease-in-out, transform 1s, background-color 1s, width 1s, height 0.3s;
+  top: 35px;
+  right: 0px;
+  -webkit-transition: opacity 1s ease-in-out, transform 1s, background-color 1s,
+    width 1s, height 0.3s;
   margin-right: 10px;
 }
 
-
-
-
 #home-menu {
   position: absolute;
-  right:0;
+  right: 0;
   height: 300px;
 }
 #menu-knob {
-  height:80px;
+  height: 80px;
   transition: transform 0.7s;
 }
 #menu-content {
@@ -616,31 +601,19 @@ div.menu-container div li a.anchor-menu:hover {
 
 .menu-anchor {
   color: rgba(255, 255, 255, 0.9);
-  font-size:40px;
+  font-size: 40px;
   font-weight: 200;
   text-decoration: none !important;
-  position:relative;
-  top:10px;
+  position: relative;
+  top: 10px;
 }
 
 .menu-anchor:hover {
   color: rgba(236, 165, 59, 0.9);
 }
 
-/*.card {
-  width: 130px;
-  height: 195px;
-  background: url("images/card-back.jpg") no-repeat;
-  display: inline-block;
-}
-.card:hover {
-  background: url("images/card-front.jpg") no-repeat;
-}*/
 
-
-
-
-span#title {
+span.title {
   position: relative;
   font-size: calc(5px + 5vw);
   top: 20px;
@@ -654,78 +627,183 @@ span#title {
   animation: shake 2.5s linear forwards;
 }
 
-span#title span {
+span.title span {
   position: absolute;
   top: 0;
   left: 0;
   transform: translate(-50%, -50%);
   -webkit-clip-path: polygon(10% 0%, 44% 0%, 70% 100%, 55% 100%);
-          clip-path: polygon(10% 0%, 44% 0%, 70% 100%, 55% 100%);
+  clip-path: polygon(10% 0%, 44% 0%, 70% 100%, 55% 100%);
 }
 
-span#title::before,
-span#title::after {
+span.title::before,
+span.title::after {
   content: attr(data-text);
   position: absolute;
   top: 0;
   left: 0;
 }
 
-span#title::before {
+span.title::before {
   animation: crack1 2.5s linear forwards;
   -webkit-clip-path: polygon(0% 0%, 10% 0%, 55% 100%, 0% 100%);
-          clip-path: polygon(0% 0%, 10% 0%, 55% 100%, 0% 100%);
+  clip-path: polygon(0% 0%, 10% 0%, 55% 100%, 0% 100%);
 }
 
-span#title::after {
+span.title::after {
   animation: crack2 2.5s linear forwards;
   -webkit-clip-path: polygon(44% 0%, 100% 0%, 100% 100%, 70% 100%);
-          clip-path: polygon(44% 0%, 100% 0%, 100% 100%, 70% 100%);
+  clip-path: polygon(44% 0%, 100% 0%, 100% 100%, 70% 100%);
 }
 
+@media (max-width: 576px) {
+  #events-carousel {
+    position: absolute;
+    bottom: 50px;
+    left: auto;
+    width: 500px;
+    height: 100px;
+    padding-left: 250px;
+    padding-top: 0;
+    display: block;
+  }
+
+  .event-cell {
+    position: absolute;
+    text-align: center;
+    width: 60vw;
+    transition: opacity 1s ease-in-out;
+    -moz-transition: opacity 1s ease-in-out;
+    -webkit-transition: opacity 1s ease-in-out, transform 1s;
+  }
+  .event-info {
+    position: static;
+    display: block;
+    margin: 0;
+  }
+
+  .event-info .event-title {
+    font-size: calc(5vw);
+  }
+  .event-info .localdata {
+    font-size: 3vw;
+  }
+
+  .event-line {
+    position: static;
+    display: block;
+    margin: 0;
+  }
+
+  footer.social-container {
+    height: auto;
+    padding: 0 5px;
+  }
+  footer.social-container div {
+    margin-bottom: 7px;
+  }
+
+
+
+
+
+
+
+
+  #home-menu {
+    position: absolute;
+    top: 35px;
+    right: auto;
+  }
+  #menu-knob {
+    height: 80px;
+    transition: transform 0.7s;
+  }
+  #menu-content {
+    display: inline-block;
+  }
+  
+  .menu-anchor {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 9vw;
+    position: relative;
+    top: auto;
+  }
+  
+  .menu-anchor:hover {
+    color: rgba(236, 165, 59, 0.9);
+  }
+
+
+
+
+  span.title {
+    font-size: calc(3px + 7vw);
+    top:0;
+  }
+}
+
+
 @keyframes shake {
-  5%, 15%, 25%, 35%, 55%, 65%, 75%, 95% {
-      filter: blur(0.018em);
-      transform: translateY(0.018em) rotate(0deg);
+  5%,
+  15%,
+  25%,
+  35%,
+  55%,
+  65%,
+  75%,
+  95% {
+    filter: blur(0.018em);
+    transform: translateY(0.018em) rotate(0deg);
   }
 
-  10%, 30%, 40%, 50%, 70%, 80%, 90% {
-      filter: blur(0.01em);
-      transform: translateY(-0.018em) rotate(0deg);
+  10%,
+  30%,
+  40%,
+  50%,
+  70%,
+  80%,
+  90% {
+    filter: blur(0.01em);
+    transform: translateY(-0.018em) rotate(0deg);
   }
 
-  20%, 60% {
-      filter: blur(0.03em);
-      transform: translate(-0.018em, 0.018em) rotate(0deg);
+  20%,
+  60% {
+    filter: blur(0.03em);
+    transform: translate(-0.018em, 0.018em) rotate(0deg);
   }
 
-  45%, 85% {
-      filter: blur(0.03em);
-      transform: translate(0.018em, -0.018em) rotate(0deg);
+  45%,
+  85% {
+    filter: blur(0.03em);
+    transform: translate(0.018em, -0.018em) rotate(0deg);
   }
 
   100% {
-      filter: blur(0.007em);
-      transform: translate(0) rotate(-0.5deg);
+    filter: blur(0.007em);
+    transform: translate(0) rotate(-0.5deg);
   }
 }
 
 @keyframes crack1 {
-  0%, 95% {
-      transform: translate(-50%, -50%);
+  0%,
+  95% {
+    transform: translate(-50%, -50%);
   }
 
   100% {
-      transform: translate(-51%, -48%);
+    transform: translate(-51%, -48%);
   }
 }
 
 @keyframes crack2 {
-  0%, 95% {
-      transform: translate(-50%, -50%);
+  0%,
+  95% {
+    transform: translate(-50%, -50%);
   }
 
   100% {
-      transform: translate(-49%, -53%);
+    transform: translate(-49%, -53%);
   }
 }
