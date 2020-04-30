@@ -10,9 +10,13 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import logo from './logo.svg';
 import './App.css';
 
+import knob from './knob.png';
+
+import ReactScrollWheelHandler from "react-scroll-wheel-handler";
+
 import { IoIosSend } from 'react-icons/io';
 
-import { Container, Row, Button, Col, Form } from 'react-bootstrap';
+import { Container, Row, Button, Col, Form, ThemeProvider } from 'react-bootstrap';
 import * as THREE from "three";
 
 function Navbar() {
@@ -35,7 +39,7 @@ function Navbar() {
         </ul>
       </div>
       <div className="mx-auto">
-        <Link to="/" className="navbar-brand mx-auto d-none d-lg-inline-block">NEURA of the NORTH</Link>
+        <Link to="/" className="navbar-brand mx-auto d-none d-lg-inline-block"><span id="title" data-text="NEURA of the NORTH"><span>NEURA of the NORTH</span></span></Link>
         <Link to="/" className="navbar-brand mx-auto d-lg-none d-inline-block">
           <img src={logo} alt="logo" />
         </Link>
@@ -244,48 +248,67 @@ class Home extends React.Component {
       isLoaded: false,
       events: [],
       selectedIndex: 0,
-      cellCount: 6
+      cellCount: 6,
+      knobRotation: 0
     };
   }
 
-  timer() {
-    this.setState({ selectedIndex: this.state.selectedIndex + 1 });
-  }
 
   previousEvent() {
-    this.setState({
-      selectedIndex: this.state.selectedIndex - 1
-    });
-    console.log(this.state)
+    if (this.state.selectedIndex < this.state.events.length - 1) {
+      this.setState({
+        selectedIndex: this.state.selectedIndex + 1
+      });
+    }
   }
   nextEvent() {
-    this.setState({
-      selectedIndex: this.state.selectedIndex + 1
-    });
+    if (this.state.selectedIndex > 0) {
+      this.setState({
+        selectedIndex: this.state.selectedIndex - 1
+      });
+    }
   }
 
+  updateKnobRotation(newRot) { this.setState({ knobRotation: newRot }); }
 
   componentDidMount() {
-    var intervalId = setInterval(() => this.timer(), 3000);
-    // store intervalId in the state so it can be accessed later:
-    this.setState({ intervalId: intervalId });
-
-    fetch('https://neuranorth.000webhostapp.com/wp-json/wp/v2/events')
+    fetch('https://neuranorth.000webhostapp.com/wp-json/wp/v2/events?per_page=100')
       .then(res => res.json())
       .then(
         (events) => {
           console.log(events)
-          let eventsTmp = events
-          if (events.length > 0) {
-            while (events.length % this.state.cellCount !== 0) {
-              events = events.concat(eventsTmp)
-              console.log(events)
+
+          events = events.sort(function (a, b) {
+            // needed because dates are in format DD/MM/YYYY
+            var datePartsA = a.acf.date.split("/");
+            var dateA = new Date(+datePartsA[2], datePartsA[1] - 1, +datePartsA[0]);
+            var datePartsB = b.acf.date.split("/");
+            var dateB = new Date(+datePartsB[2], datePartsB[1] - 1, +datePartsB[0]);
+            return dateB - dateA;
+          });
+
+          let selIndex = 0;
+          let dateDistance = Number.MAX_SAFE_INTEGER;
+          var today = new Date();
+          today.setHours(0, 0, 0, 0);
+          for (var i = 0; i < events.length; ++i) {
+            let dateParts = events[i].acf.date.split("/");
+            let date = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+            let tmpD = date - today;
+            if (tmpD >= 0 && tmpD <= dateDistance) {
+              dateDistance = tmpD;
+              selIndex = i;
+            } else if (tmpD < 0) {
+              //cant break because of the titles that have special characters need to be escaped
+              //break;
             }
+            events[i].title.rendered = events[i].title.rendered.replace(/&#8220;/g, "\"").replace(/&#8221;/g, "\"").replace(/&#8211;/g, "-")
           }
 
           this.setState({
             isLoaded: true,
-            events: events
+            events: events,
+            selectedIndex: selIndex
           });
         },
         (error) => {
@@ -298,13 +321,9 @@ class Home extends React.Component {
       )
   }
 
-  componentWillUnmount() {
-    clearInterval(this.state.intervalId);
-  }
-
 
   render() {
-    const { error, isLoaded, events, selectedIndex, cellCount } = this.state;
+    const { error, isLoaded, events, selectedIndex, knobRotation } = this.state;
     /*if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -313,13 +332,148 @@ class Home extends React.Component {
     return (
       <section>
         {window.innerWidth > 576 && <ThreeD />}
-        <Container fluid className="position-absolute">
+        <ReactScrollWheelHandler
+          upHandler={() => this.nextEvent()}
+          downHandler={() => this.previousEvent()}
+          id="events-carousel">
+          <div id="events-lines">
+            {events.map((value, index) => {
+              let dist = Math.abs(index - selectedIndex)
+              let z = 0;
+              let y = 0;
+              let opacity = 100;
+              let height = 2;
+              let bgColor = 'white';
+              let width = 20;
+              if (dist >= 4) {
+                z = -200;
+                y = 400;
+                opacity = 0;
+              } else if (dist >= 3) {
+                z = -120;
+                y = 300;
+              } else if (dist >= 2) {
+                z = -60;
+                y = 200;
+              } else if (dist >= 1) {
+                z = -20;
+                y = 100;
+              } else {
+                height = 3;
+                bgColor = 'tomato';
+                width = 50;
+              }
+              if (index < selectedIndex) {
+                y = -y
+              }
+              return <span className="event-line" style={{
+                transform: 'translate3d(0, ' + y + 'px,' + z + 'px)',
+                height: height + 'px',
+                width: width + 'px',
+                backgroundColor: bgColor,
+                opacity: opacity
+              }}></span>
+            })}
+          </div>
+          <div id="events-infos">
+            {events.map((value, index) => {
+              let dist = Math.abs(index - selectedIndex)
+              let z = 0;
+              let y = 0;
+              let opacity = 100;
+              if (dist >= 4) {
+                z = -200;
+                y = 400;
+                opacity = 0;
+              } else if (dist >= 3) {
+                z = -120;
+                y = 300;
+              } else if (dist >= 2) {
+                z = -60;
+                y = 200;
+              } else if (dist >= 1) {
+                z = -20;
+                y = 100;
+              } else {
+              }
+              if (index < selectedIndex) {
+                y = -y
+              }
+              return <div className="event-info" style={{ transform: 'translate3d(0, ' + y + 'px,' + z + 'px)', opacity: opacity }}>
+                <span class="title">{value.title.rendered}</span>
+                <br />
+                <span class="">{value.acf.local} . {value.acf.date}</span>
+              </div>
+            })}
+          </div>
+          {/*events.map((value, index) => {
+            let dist = Math.abs(index - selectedIndex)
+            let z = 0;
+            let y = 0;
+            let opacity = 100;
+            if (dist >= 4) {
+              z = -200;
+              y = 400;
+              opacity = 0;
+            } else if (dist >= 3) {
+              z = -120;
+              y = 300;
+            } else if (dist >= 2) {
+              z = -60;
+              y = 200;
+            } else if (dist >= 1) {
+              z = -20;
+              y = 100;
+            } else {
+            }
+            if (index < selectedIndex) {
+              y = -y
+            }
+            return <div className='event-cell' style={{ transform: 'translate3d(0, ' + y + 'px,' + z + 'px)', opacity: opacity }}>
+              <div>
+                <span className="event-line"></span>
+              </div>
+              <div className="event-info">
+                <span class="title">{value.title.rendered}</span>
+                <br/>
+                <span class="">{value.acf.local} . {value.acf.date}</span>
+              </div>
+            </div>
+          })*/}
+        </ReactScrollWheelHandler>
+        <div id="home-menu">
+          <img id="menu-knob" src={knob} alt="knob" style={{ transform: 'translateY(-100px) rotate(' + knobRotation + 'deg)' }} />
+
+          <div id="menu-content">
+            <div onMouseEnter={() => this.updateKnobRotation(-50)}>
+              <svg height="100" width="80">
+                <polyline points="0,90 20,50 70,50" style={{ fill: 'transparent', stroke: 'white', strokeWidth: 2 }} />
+              </svg>
+              <Link className="menu-anchor" to="/works">WORKS</Link>
+            </div>
+            <div onMouseEnter={() => this.updateKnobRotation(0)} >
+              <svg height="100" width="80">
+                <polyline points="20,50 70,50" style={{ fill: 'transparent', stroke: 'white', strokeWidth: 2 }} />
+              </svg>
+              <Link className="menu-anchor" to="/bio">BIO</Link>
+            </div>
+            <div onMouseEnter={() => this.updateKnobRotation(50)}>
+              <svg height="100" width="80">
+                <polyline points="0,10 20,50 70,50" style={{ fill: 'transparent', stroke: 'white', strokeWidth: 2 }} />
+              </svg>
+              <Link className="menu-anchor" to="/contact">CONTACT</Link>
+            </div>
+          </div>
+        </div>
+        {/*<Container fluid className="position-absolute">
+
           <Row>
             <Col xs={{ span: 12, order: 3 }} md={{ span: 3, order: 1 }} className="events-container">
               <div className="scene">
                 <div className="led-container">
                   <div className="led mid"></div>
                 </div>
+                
                 <div className="carousel" style={{ transform: 'translateZ(-120px) rotateX(' + (selectedIndex / cellCount) * -360 + 'deg)' }}>
                   {events.map((value, index) => {
                     let rotateX = index * (360 / cellCount)
@@ -335,18 +489,18 @@ class Home extends React.Component {
                   })}
                 </div>
               </div>
-              {/*<p style={{ textAlign: "center" }}>
+              <p style={{ textAlign: "center" }}>
                 <button className="previous-button" onClick={() => this.previousEvent()}>Previous</button>
                 <button className="next-button" onClick={() => this.nextEvent()}>Next</button>
-                </p>*/}
-            </Col>
+                </p>
+            </Col>}
             <Col xs={{ span: 12, order: 1 }} md={{ span: 6, order: 2 }} className></Col>
             <Col xs={{ span: 12, order: 2 }} md={{ span: 3, order: 3 }}>
 
-              {/*<div className="led-container">
+              {<div className="led-container">
                 <div className="led mid"></div>
                 <div className="text">Works</div>
-    </div>*/}
+    </div>}
               <Row className="menu-container">
                 <Col xs={12} md={10} className="my-3">
                   <li>
@@ -366,9 +520,9 @@ class Home extends React.Component {
               </Row>
             </Col>
           </Row>
-        </Container>
+                </Container>*/}
         <footer className="social-container">
-          <div class="mx-auto">
+          <div className="mx-auto">
             <button className="btn btn-sm btn-dark px-4 py-0">Check my stories</button>
           </div>
           <div className="mx-auto">
@@ -397,12 +551,12 @@ class Bio extends React.Component {
       changeDelta: 0
     }
 
-    this.onWheel = this.onWheel.bind(this);
+    /*this.onWheel = this.onWheel.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
-    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onTouchStart = this.onTouchStart.bind(this);*/
   }
 
-  onWheel(event) {
+  /*onWheel(event) {
     console.log(event)
     this.setState({
       delta: this.state.delta + event.deltaY
@@ -456,22 +610,42 @@ class Bio extends React.Component {
     this.setState({
       touchStart: event.touches[0].clientY
     })
+  }*/
+
+  previousPage() {
+    if (this.state.page > 0) {
+      this.setState({
+        page: this.state.page - 1
+      });
+    }
+  }
+  nextPage() {
+    if (this.state.page < 3) {
+      this.setState({
+        page: this.state.page + 1
+      });
+    }
   }
 
   render() {
-    const { changeDelta, delta, page } = this.state;
+    const { /*changeDelta, delta,*/ page } = this.state;
     return (
-      <section
-        onWheel={this.onWheel}
+
+      <ReactScrollWheelHandler
+        upHandler={() => this.previousPage()}
+        downHandler={() => this.nextPage()}>
+        <section>
+          {/*onWheel={this.onWheel}
         onTouchMove={this.onTouchMove}
         onTouchStart={this.onTouchStart}>
         <h2>{changeDelta}</h2>
-        <h2>{delta}</h2>
-        <div className={page !== 0 ? 'd-none' : ''}>Bio</div>
-        <div className={page !== 1 ? 'd-none' : ''}>Nome</div>
-        <div className={page !== 2 ? 'd-none' : ''}>Idade</div>
-        <div className={page !== 3 ? 'd-none' : ''}>última</div>
-      </section >
+    <h2>{delta}</h2>*/}
+          <div className={page !== 0 ? 'd-none' : ''}>Bio</div>
+          <div className={page !== 1 ? 'd-none' : ''}>Nome</div>
+          <div className={page !== 2 ? 'd-none' : ''}>Idade</div>
+          <div className={page !== 3 ? 'd-none' : ''}>última</div>
+        </section >
+      </ReactScrollWheelHandler>
     );
   }
 }
