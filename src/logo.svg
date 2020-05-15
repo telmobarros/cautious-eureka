@@ -1,22 +1,16 @@
-<svg width="45" height="45" xmlns="http://www.w3.org/2000/svg">
- <defs>
-  <filter height="200%" width="200%" y="-50%" x="-50%" id="svg_2_blur">
-   <feGaussianBlur stdDeviation="0.5" in="SourceGraphic"/>
-  </filter>
-  <filter id="svg_1_blur">
-   <feGaussianBlur stdDeviation="0.7" in="SourceGraphic"/>
-  </filter>
- </defs>
- <g>
-  <title>background</title>
-  <rect fill="none" id="canvas_background" height="47" width="47" y="-1" x="-1"/>
-  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
-   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
-  </g>
- </g>
- <g>
-  <title>Layer 1</title>
-  <text filter="url(#svg_1_blur)" font-weight="bold" xml:space="preserve" text-anchor="start" font-family="'Trebuchet MS', Gadget, sans-serif" font-size="39" id="svg_1" y="36.5" x="9.499981" stroke-width="0" stroke="#000" fill="#00ff00">N</text>
-  <text filter="url(#svg_2_blur)" font-style="italic" xml:space="preserve" text-anchor="start" font-family="'Trebuchet MS', Gadget, sans-serif" font-size="18" id="svg_2" y="17.000017" x="30.406215" stroke-width="0" stroke="#000" fill="#b2b2b2">2</text>
- </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   width="400"
+   height="177"
+   id="svg2">
+  <defs
+     id="defs5" />
+  <path
+     d="M 0,0 L 400,0 L 400,177 L 0,177 L 0,0 z M 378,22 L 22,22 L 22,155 L 378,155 L 378,22 z M 48.6967,131.36337 L 48,46 L 73.221792,46 L 131.03161,97 L 132,46 L 156,46 L 156,132 L 131.99081,132 L 73.5,79.071108 L 73,105.28555 L 72.5,131.5 L 48.6967,131.36337 z M 188,46 L 212,46 L 212,132 L 188,132 L 188,46 z M 244,46 L 268,46 L 267.81005,96.848255 L 326.5,46.034523 L 352.02147,46 L 351.5,131.5 L 327.5,131.5 L 326.5,78.930011 L 267.80003,132 L 244,132 L 244,46 z "
+     style="fill:#FFFFFF"
+     id="path2161" />
 </svg>

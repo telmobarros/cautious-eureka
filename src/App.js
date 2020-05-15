@@ -43,10 +43,13 @@ function Navbar() {
         </ul>
       </div>
       <div className="mx-auto">
-        <Link to="/" className="navbar-brand mx-auto d-none d-lg-inline-block"><span class="title" data-text="NEURA of the NORTH"><span>NEURA of the NORTH</span></span></Link>
+        {/*<Link to="/" className="navbar-brand mx-auto d-none d-lg-inline-block"><span class="title" data-text="NEURA of the NORTH"><span>NEURA of the NORTH</span></span></Link>
         <Link to="/" className="navbar-brand mx-auto d-lg-none d-inline-block">
           {pathname === '/' && <span class="title" data-text="NEURA of the NORTH"><span>NEURA of the NORTH</span></span>}
           {pathname !== '/' && <img src={logo} alt="logo" />}
+        </Link> *** VERSAO COM NOME EM PC E LOGO EM MOBILE***/}
+        <Link to="/" className="navbar-brand mx-auto">
+          <img id="logo" src={logo} alt="logo" />
         </Link>
       </div>
       <div className="navbar-collapse collapse w-100">
@@ -64,6 +67,17 @@ function Navbar() {
         </ul>
       </div>
     </nav>
+  );
+}
+
+function ScrollEffect() {
+
+  return (
+    <div class="arrow">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   );
 }
 
@@ -87,13 +101,13 @@ class App extends React.Component {
     return (
       <div className="App" >
         <Sound
-      url="./bgSound.mp3"
-      autoLoad={true}
-      playStatus={Sound.status.PLAYING}
-      onLoading={this.handleSongLoading}
-      onPlaying={this.handleSongPlaying}
-      onFinishedPlaying={this.handleSongFinishedPlaying}
-    />
+          url="./bgSound.mp3"
+          autoLoad={true}
+          playStatus={Sound.status.PLAYING}
+          onLoading={this.handleSongLoading}
+          onPlaying={this.handleSongPlaying}
+          onFinishedPlaying={this.handleSongFinishedPlaying}
+        />
         <Navbar />
         <AnimatedSwitch />
       </div>
@@ -111,7 +125,7 @@ class Home extends React.Component {
       events: [],
       selectedIndex: 0,
       cellCount: 6,
-      knobRotation: 0,
+      knobRotation: -120,
       random3d: Math.random()
     };
   }
@@ -275,7 +289,7 @@ class Home extends React.Component {
         {window.innerWidth > 576 && <div id="home-menu">
           <img id="menu-knob" src={knob} alt="knob" style={{ transform: 'translateY(-100px) rotate(' + knobRotation + 'deg)' }} />
 
-          <div id="menu-content">
+          <div id="menu-content" onMouseLeave={() => this.updateKnobRotation(-120)}>
             <div onMouseEnter={() => this.updateKnobRotation(-50)}>
               <svg height="100" width="80">
                 <polyline points="0,90 20,50 70,50" style={{ fill: 'transparent', stroke: 'white', strokeWidth: 2 }} />
@@ -362,9 +376,9 @@ class Home extends React.Component {
           })}
         </ReactScrollWheelHandler>}
         <footer className="social-container">
-          <div className="mx-auto">
+          {/*<div className="mx-auto">
             <button className="btn btn-sm btn-dark px-4 py-0">Check my stories</button>
-          </div>
+        </div>*/}
           <div className="mx-auto">
             <a href="https://www.facebook.com/profile.php?id=100000174129300" target="_blank" >FACEBOOK</a>
             <span className="slash"> / </span>
@@ -480,10 +494,35 @@ class Bio extends React.Component {
         onTouchStart={this.onTouchStart}>
         <h2>{changeDelta}</h2>
     <h2>{delta}</h2>*/}
-          <div className={page !== 0 ? 'd-none' : ''}>Bio</div>
-          <div className={page !== 1 ? 'd-none' : ''}>Nome</div>
-          <div className={page !== 2 ? 'd-none' : ''}>Idade</div>
-          <div className={page !== 3 ? 'd-none' : ''}>última</div>
+          <Container fluid className="text-justify">
+            <Row>
+
+                  <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 0 ?'d-none' : ''}`}>
+                    Rafael Maia, was born in Porto, Portugal. His first contact with music and sound begun with a guitar in the early years of his infancy.
+                </Col>
+                  <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 1 ?'d-none' : ''}`}>
+                    Finished his graduation course in sound and light design by the end of 2018 (acho eu), in this period he had the change to participate as a composer and sound designer for multiple theatre peaces, dance performances and sound installations.
+                </Col>
+                  <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 2 ?'d-none' : ''}`}>
+                    He also had the chance to lead some multidisciplinar art projects in and out o Portugal.
+                </Col>
+                  <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 3 ?'d-none' : ''}`}>
+                    Recently finished his master degree in sound design with a thesis on how to design timbre to affect emotion. Since the beginning of his master degree, Rafael has been actively working in new projects of his own as well as collaborating with multiple well known names in sound design and music in Portugal.
+                </Col>
+
+            </Row>
+          </Container>
+          <div className="bio-scroll">
+  {page == 0 && <ScrollEffect /> }
+          </div>
+          <div className="part-indicator">
+						<ul>
+							<li style={{opacity: page == 0 ? 1 : 0.2}}></li>
+							<li style={{opacity: page == 1 ? 1 : 0.2}}></li>
+							<li style={{opacity: page == 2 ? 1 : 0.2}}></li>
+							<li style={{opacity: page == 3 ? 1 : 0.2}}></li>
+						</ul>
+					</div>
         </section >
       </ReactScrollWheelHandler>
     );
@@ -498,11 +537,13 @@ class Contact extends React.Component {
       name: '',
       email: '',
       subject: '',
-      message: ''
+      message: '',
+      showForm: false
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.showForm = this.showForm.bind(this);
   }
 
   handleChange(event) {
@@ -543,39 +584,51 @@ class Contact extends React.Component {
     event.preventDefault();
   }
 
+  showForm() {
+    this.setState({ showForm: true });
+  }
+
   render() {
-    const { error, name, email, subject, message } = this.state;
+    const { error, name, email, subject, message, showForm } = this.state;
     return (
-      <section>
-        <Container fluid className="text-center">
-          <Row>
-            <Col xs="12" sm="10" md="8" lg="4" className="mx-auto">
-              <p className="font-weight-bolder mb-0">MAIL ME</p>
-              <a className="nostyle" href={'mailto:rafamaianet@hotmail.com?subject=' + subject + '&body=' + message}>rafamaianet@hotmail.com</a>
-              <p className="my-4">- or -</p>
-              <p className="font-weight-bolder mb-0">FILL THE FORM BELOW</p>
-              {error &&
-                <p className="small text-danger error-message">{error.message}</p>
-              }
-              <Form className="contact-form" onSubmit={this.handleSubmit}>
-                <Form.Group>
-                  <Form.Control type="text" placeholder="Name" name="name" value={name} onChange={this.handleChange} />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Control type="email" placeholder="name@example.com" name="email" value={email} onChange={this.handleChange} />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Control type="text" placeholder="Subject" name="subject" value={subject} onChange={this.handleChange} />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Control as="textarea" rows="5" placeholder="Tell me more..." name="message" value={message} onChange={this.handleChange} />
-                </Form.Group>
-                <Button variant="dark" type="submit">SEND <IoIosSend /></Button>
-              </Form>
-            </Col>
-          </Row>
-        </Container>
-      </section >
+      <ReactScrollWheelHandler
+        downHandler={() => this.showForm()}>
+        <section>
+          <Container fluid className="text-center">
+            <Row>
+              <Col xs="12" sm="10" md="8" lg="4" className="mx-auto">
+                {/*<p className="font-weight-bolder mb-0">MAIL ME</p>*/}
+                <a className="nostyle" href={'mailto:rafamaianet@hotmail.com?subject=' + subject + '&body=' + message}>rafamaianet@hotmail.com</a>
+                <p className="my-4">- or -</p>
+                {!showForm &&
+                  <div>
+                    <p className="font-weight-bolder mb-0" onClick={() => this.showForm()}>CLICK/DRAG DOWN TO CONTACT ME</p>
+                    <ScrollEffect />
+                  </div>
+                }
+                {error &&
+                  <p className="small text-danger error-message">{error.message}</p>
+                }
+                <Form className={`contact-form ${showForm ? "visible" : "invisible"}`} onSubmit={this.handleSubmit} >
+                  <Form.Group>
+                    <Form.Control type="text" placeholder="Name" name="name" value={name} onChange={this.handleChange} />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Control type="email" placeholder="name@example.com" name="email" value={email} onChange={this.handleChange} />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Control type="text" placeholder="Subject" name="subject" value={subject} onChange={this.handleChange} />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Control as="textarea" rows="5" placeholder="Tell me more..." name="message" value={message} onChange={this.handleChange} />
+                  </Form.Group>
+                  <Button variant="dark" type="submit">SEND <IoIosSend /></Button>
+                </Form>
+              </Col>
+            </Row>
+          </Container>
+        </section >
+      </ReactScrollWheelHandler>
     );
   }
 
