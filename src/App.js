@@ -11,6 +11,8 @@ import logo from './logo.svg';
 import './App.css';
 
 import knob from './knob.png';
+import ledOn from './led_on.png';
+import ledOff from './led_off.png';
 
 import ReactScrollWheelHandler from "react-scroll-wheel-handler";
 import Sound from 'react-sound';
@@ -126,6 +128,7 @@ class Home extends React.Component {
       selectedIndex: 0,
       cellCount: 6,
       knobRotation: -120,
+      leds: [false, false, false],
       random3d: Math.random()
     };
   }
@@ -146,7 +149,31 @@ class Home extends React.Component {
     }
   }
 
+
+
   updateKnobRotation(newRot) { this.setState({ knobRotation: newRot }); }
+
+  // 0 -> none; 1-> works; 2-> bio; 3-> contact
+  updateSelectedMenu(selMenu) {
+    let knobRotation = -120
+    let leds = [false, false, false]
+    if (selMenu > 0) {
+      leds[selMenu - 1] = true
+      switch (selMenu) {
+        case 1:
+          knobRotation = -50
+          break;
+        case 2:
+          knobRotation = 0
+          break;
+        case 3:
+          knobRotation = 50
+          break;
+        default:
+      }
+    }
+    this.setState({ knobRotation: knobRotation, leds: leds })
+  }
 
   componentDidMount() {
     fetch('https://neuranorth.000webhostapp.com/wp-json/wp/v2/events?per_page=100')
@@ -200,7 +227,7 @@ class Home extends React.Component {
 
 
   render() {
-    const { error, isLoaded, events, selectedIndex, knobRotation, random3d } = this.state;
+    const { error, isLoaded, events, selectedIndex, knobRotation, leds, random3d } = this.state;
     /*if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -289,24 +316,54 @@ class Home extends React.Component {
         {window.innerWidth > 576 && <div id="home-menu">
           <img id="menu-knob" src={knob} alt="knob" style={{ transform: 'translateY(-100px) rotate(' + knobRotation + 'deg)' }} />
 
-          <div id="menu-content" onMouseLeave={() => this.updateKnobRotation(-120)}>
-            <div onMouseEnter={() => this.updateKnobRotation(-50)}>
-              <svg height="100" width="80">
-                <polyline points="0,90 20,50 70,50" style={{ fill: 'transparent', stroke: 'white', strokeWidth: 2 }} />
-              </svg>
-              <Link className="menu-anchor" to="/works">WORKS</Link>
+          <div id="menu-content" onMouseLeave={() => this.updateSelectedMenu(0)}>
+            <div onMouseEnter={() => this.updateSelectedMenu(1)} className="menu-div">
+              <div className="d-inline-block">
+                <div className="led led-arrow">.</div>
+                <svg height="100" width="80" style={{ background: 'black', mixBlendMode: "multiply" }}>
+                  <polyline points="0,90 20,50 70,50" style={{ stroke: 'white', strokeWidth: 2 }} />
+                </svg>
+              </div>
+              <div className="menu-anchor-div">
+                <div className="led">.</div>
+                <Link className="menu-anchor" to="/works">WORKS</Link>
+              </div>
+              <div className="menu-leds-div d-inline-block">
+                <img src={ledOn} alt="led-works-on" className="led-on" />
+                <img src={ledOff} alt="led-works-off" className="led-off" />
+              </div>
             </div>
-            <div onMouseEnter={() => this.updateKnobRotation(0)} >
-              <svg height="100" width="80">
-                <polyline points="20,50 70,50" style={{ fill: 'transparent', stroke: 'white', strokeWidth: 2 }} />
-              </svg>
-              <Link className="menu-anchor" to="/bio">BIO</Link>
+            <div onMouseEnter={() => this.updateSelectedMenu(2)} className="menu-div">
+              <div className="d-inline-block">
+                <div className="led led-arrow">.</div>
+                <svg height="100" width="80" style={{ background: 'black', mixBlendMode: "multiply" }}>
+                  <polyline points="20,50 70,50" style={{ stroke: 'white', strokeWidth: 2 }} />
+                </svg>
+              </div>
+              <div className="menu-anchor-div">
+                <div className="led">.</div>
+                <Link className="menu-anchor" to="/bio">BIO</Link>
+              </div>
+              <div className="menu-leds-div d-inline-block">
+                <img src={ledOn} alt="led-works-on" className="led-on" />
+                <img src={ledOff} alt="led-works-off" className="led-off" />
+              </div>
             </div>
-            <div onMouseEnter={() => this.updateKnobRotation(50)}>
-              <svg height="100" width="80">
-                <polyline points="0,10 20,50 70,50" style={{ fill: 'transparent', stroke: 'white', strokeWidth: 2 }} />
-              </svg>
-              <Link className="menu-anchor" to="/contact">CONTACT</Link>
+            <div onMouseEnter={() => this.updateSelectedMenu(3)} className="menu-div">
+              <div className="d-inline-block">
+                <div className="led led-arrow">.</div>
+                <svg height="100" width="80" style={{ background: 'black', mixBlendMode: "multiply" }}>
+                  <polyline points="0,10 20,50 70,50" style={{ stroke: 'white', strokeWidth: 2 }} />
+                </svg>
+              </div>
+              <div className="menu-anchor-div">
+                <div className="led">.</div>
+                <Link className="menu-anchor" to="/contact">CONTACT</Link>
+              </div>
+              <div className="menu-leds-div d-inline-block">
+                <img src={ledOn} alt="led-works-on" className="led-on" />
+                <img src={ledOff} alt="led-works-off" className="led-off" />
+              </div>
             </div>
           </div>
         </div>}
@@ -497,32 +554,32 @@ class Bio extends React.Component {
           <Container fluid className="text-justify">
             <Row>
 
-                  <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 0 ?'d-none' : ''}`}>
-                    Rafael Maia, was born in Porto, Portugal. His first contact with music and sound begun with a guitar in the early years of his infancy.
+              <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 0 ? 'd-none' : ''}`}>
+                Rafael Maia, was born in Porto, Portugal. His first contact with music and sound begun with a guitar in the early years of his infancy.
                 </Col>
-                  <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 1 ?'d-none' : ''}`}>
-                    Finished his graduation course in sound and light design by the end of 2018 (acho eu), in this period he had the change to participate as a composer and sound designer for multiple theatre peaces, dance performances and sound installations.
+              <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 1 ? 'd-none' : ''}`}>
+                Finished his graduation course in sound and light design by the end of 2018 (acho eu), in this period he had the change to participate as a composer and sound designer for multiple theatre peaces, dance performances and sound installations.
                 </Col>
-                  <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 2 ?'d-none' : ''}`}>
-                    He also had the chance to lead some multidisciplinar art projects in and out o Portugal.
+              <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 2 ? 'd-none' : ''}`}>
+                He also had the chance to lead some multidisciplinar art projects in and out o Portugal.
                 </Col>
-                  <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 3 ?'d-none' : ''}`}>
-                    Recently finished his master degree in sound design with a thesis on how to design timbre to affect emotion. Since the beginning of his master degree, Rafael has been actively working in new projects of his own as well as collaborating with multiple well known names in sound design and music in Portugal.
+              <Col xs="12" sm="10" md="8" lg="4" className={`mx-auto ${page !== 3 ? 'd-none' : ''}`}>
+                Recently finished his master degree in sound design with a thesis on how to design timbre to affect emotion. Since the beginning of his master degree, Rafael has been actively working in new projects of his own as well as collaborating with multiple well known names in sound design and music in Portugal.
                 </Col>
 
             </Row>
           </Container>
           <div className="bio-scroll">
-  {page == 0 && <ScrollEffect /> }
+            {page == 0 && <ScrollEffect />}
           </div>
           <div className="part-indicator">
-						<ul>
-							<li style={{opacity: page == 0 ? 1 : 0.2}}></li>
-							<li style={{opacity: page == 1 ? 1 : 0.2}}></li>
-							<li style={{opacity: page == 2 ? 1 : 0.2}}></li>
-							<li style={{opacity: page == 3 ? 1 : 0.2}}></li>
-						</ul>
-					</div>
+            <ul>
+              <li style={{ opacity: page == 0 ? 1 : 0.2 }}></li>
+              <li style={{ opacity: page == 1 ? 1 : 0.2 }}></li>
+              <li style={{ opacity: page == 2 ? 1 : 0.2 }}></li>
+              <li style={{ opacity: page == 3 ? 1 : 0.2 }}></li>
+            </ul>
+          </div>
         </section >
       </ReactScrollWheelHandler>
     );
@@ -651,7 +708,7 @@ class Works extends React.Component {
 
   componentDidMount() {
 
-    fetch('https://neuranorth.000webhostapp.com/wp-json/wp/v2/projects')
+    fetch('https://neuranorth.000webhostapp.com/wp-json/wp/v2/projects?per_page=100')
       .then(res => res.json())
       .then(
         (projects) => {
@@ -766,7 +823,7 @@ class Work extends React.Component {
       return <div>Loading...</div>;
     } else {
       return (
-        <section>
+        <section className="work-individual">
           <Container fluid>
             <Row className="text-container">
               <Col xs="12">

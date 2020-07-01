@@ -1,7 +1,7 @@
 html,
-body {
+body,
+section {
   height: 100%;
-  position: fixed;
   width: 100%;
 }
 
@@ -22,19 +22,28 @@ section {
   font-weight: 300;
   letter-spacing: 0.2em;
   color: rgb(206, 206, 206);
+
+  overflow: hidden;
+  position: fixed;
+}
+
+section.work-individual {
+  position: static;
 }
 
 .App-link {
   color: #61dafb;
 }
-p, span { /* DISABLE SELECTION */
-    -webkit-touch-callout: none; /* iOS Safari */
-      -webkit-user-select: none; /* Safari */
-       -khtml-user-select: none; /* Konqueror HTML */
-         -moz-user-select: none; /* Old versions of Firefox */
-          -ms-user-select: none; /* Internet Explorer/Edge */
-              user-select: none; /* Non-prefixed version, currently
-                                    supported by Chrome, Edge, Opera and Firefox */
+h2,
+p,
+span {
+  /* DISABLE SELECTION */
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
 img#logo {
@@ -101,24 +110,23 @@ footer.social-container a:hover {
   color: rgb(255, 255, 255);
 }
 
-
-div.bio-scroll{
+div.bio-scroll {
   bottom: 90px;
   position: fixed;
 }
 
-.part-indicator{
+.part-indicator {
   bottom: 35px;
   position: fixed;
   right: 45px;
 }
-.part-indicator li{
+.part-indicator li {
   background-color: #fff;
   border-radius: 50%;
   display: block;
   height: 3px;
   margin-top: 7px;
-  opacity: .2;
+  opacity: 0.2;
   width: 3px;
   transition: opacity 1s;
 }
@@ -179,9 +187,6 @@ div.bio-scroll{
 body {
   background-color: b;
   margin: 0px;
-
-  overflow: hidden;
-  position: fixed;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -202,10 +207,10 @@ p.error-message {
   transition: visibility 1s, opacity 1s, position 1s;
 }
 .contact-form.invisible {
-  position:absolute;
+  position: absolute;
 }
 .contact-form.visible {
-  position:relative;
+  position: relative;
 }
 
 .contact-form .form-control {
@@ -325,7 +330,18 @@ div.media-container iframe {
   background-color: transparent;
 }
 .led {
-  position: absolute;
+  color:transparent;
+  background-color: rgba(255, 197, 143);
+  height: 0px;
+  width: 140px;
+  margin: -35px 15px;
+  border-radius: 50%;
+  -webkit-animation: blinkYellow 3s infinite;
+  -moz-animation: blinkYellow 3s infinite;
+  -ms-animation: blinkYellow 3s infinite;
+  -o-animation: blinkYellow 3s infinite;
+  animation: blinkYellow 3s infinite;
+  /*position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
   height: 0px;
@@ -336,7 +352,12 @@ div.media-container iframe {
   -moz-animation: blinkYellow 3s infinite;
   -ms-animation: blinkYellow 3s infinite;
   -o-animation: blinkYellow 3s infinite;
-  animation: blinkYellow 3s infinite;
+  animation: blinkYellow 3s infinite;*/
+}
+
+.led.led-arrow {
+  width:20px;
+  margin: -50px 25px;
 }
 .led.top {
   top: 25%;
@@ -395,13 +416,13 @@ div.media-container iframe {
 }
 @keyframes blinkYellow {
   from {
-    box-shadow: rgba(255, 197, 143) 0 0 100px 30px;
+    box-shadow: rgba(255, 197, 143) 0 0 20px 10px;
   }
   20% {
-    box-shadow: rgba(255, 197, 143, 0.7) 0 0 100px 30px;
+    box-shadow: rgba(255, 197, 143, 0.7) 0 0 20px 10px;
   }
   to {
-    box-shadow: rgba(255, 197, 143) 0 0 100px 30px;
+    box-shadow: rgba(255, 197, 143) 0 0 20px 10px;
   }
 }
 
@@ -623,19 +644,71 @@ div.menu-container div li a.anchor-menu:hover {
   display: inline-block;
 }
 
+.menu-div {
+  margin: 20px 10px;
+}
+.menu-div:hover a {
+  mix-blend-mode:normal!important;
+  color:blue;
+}
+.menu-div:hover svg {
+  mix-blend-mode:normal!important;
+}
+.menu-div:hover polyline {
+  stroke:blue!important;
+}
+.menu-div:hover  {
+  mix-blend-mode:normal!important;
+  color:blue;
+}
+
+.menu-leds-div {
+  height: 25px;
+  width: 50px;
+}
+.menu-leds-div img {
+  position:absolute;
+  opacity:1;
+  transition:opacity 0.3s linear;
+}
+.menu-div:hover .led-off {
+  opacity:0;
+}
+
+.menu-anchor-div {
+  display: inline-block;
+  width: 200px;
+}
+
 .menu-anchor {
+  /* margin: 0 100px; 
+    padding: 0 100px; */
+  background-color: black;
+  /* color: rgba(255, 255, 255, 0.9); */
+  color: white;
+  font-size: 40px;
+  font-weight: 200;
+  text-decoration: none !important;
+  position: relative;
+  top: 10px;
+  display: inline-block;
+  width: 200px;
+  mix-blend-mode: multiply;
+  /*background-color: black;
   color: rgba(255, 255, 255, 0.9);
   font-size: 40px;
   font-weight: 200;
   text-decoration: none !important;
   position: relative;
   top: 10px;
+  display: inline-block;
+  width:200px;
+  mix-blend-mode: multiply;*/
 }
 
 .menu-anchor:hover {
   color: rgba(236, 165, 59, 0.9);
 }
-
 
 span.title {
   position: relative;
@@ -727,13 +800,6 @@ span.title::after {
     margin-bottom: 7px;
   }
 
-
-
-
-
-
-
-
   #home-menu {
     position: absolute;
     top: 35px;
@@ -746,27 +812,23 @@ span.title::after {
   #menu-content {
     display: inline-block;
   }
-  
+
   .menu-anchor {
     color: rgba(255, 255, 255, 0.9);
     font-size: 9vw;
     position: relative;
     top: auto;
   }
-  
+
   .menu-anchor:hover {
     color: rgba(236, 165, 59, 0.9);
   }
 
-
-
-
   span.title {
     font-size: calc(3px + 7vw);
-    top:0;
+    top: 0;
   }
 }
-
 
 @keyframes shake {
   5%,
@@ -833,38 +895,38 @@ span.title::after {
 }
 
 /****** SCROLL ARROWS ***/
-.arrow{
+.arrow {
   position: absolute;
   margin-top: 40px;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
-.arrow span{
+.arrow span {
   display: block;
   width: 15px;
   height: 15px;
-  border-bottom: 2px solid #FFFFFF;
-  border-right: 2px solid #FFFFFF;
+  border-bottom: 2px solid #ffffff;
+  border-right: 2px solid #ffffff;
   transform: rotate(45deg);
   margin: -10px;
   animation: animate 2s infinite;
 }
-.arrow span:nth-child(2){
+.arrow span:nth-child(2) {
   animation-delay: -0.2s;
 }
-.arrow span:nth-child(3){
+.arrow span:nth-child(3) {
   animation-delay: -0.4s;
 }
 @keyframes animate {
-  0%{
-      opacity: 0;
-      transform: rotate(45deg) translate(-20px,-20px);
+  0% {
+    opacity: 0;
+    transform: rotate(45deg) translate(-20px, -20px);
   }
-  50%{
-      opacity: 1;
+  50% {
+    opacity: 1;
   }
-  100%{
-      opacity: 0;
-      transform: rotate(45deg) translate(20px,20px);
+  100% {
+    opacity: 0;
+    transform: rotate(45deg) translate(20px, 20px);
   }
 }
